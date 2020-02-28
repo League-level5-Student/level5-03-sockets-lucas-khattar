@@ -10,28 +10,27 @@ public class ServerGreeter extends Thread {
 	ServerSocket ss;
 
 	public ServerGreeter() throws IOException {
-		ss = new ServerSocket(8080);
+		ss = new ServerSocket(8081);
 	}
 
 	public void run() {
 		boolean sos = true;
-		while (sos) {
-			try {
-				System.out.println("Waiting for client to connect...");
-				Socket sock = ss.accept();
-				System.out.println("Client has connected!");
+		try {
+			System.out.println("Server: Waiting for client to connect...");
+			Socket sock = ss.accept();
+			System.out.println("Server: Client has connected!");
+			while (sos) {
 				DataInputStream dis = new DataInputStream(sock.getInputStream());
-				System.out.println(dis.readUTF());
 				DataOutputStream dos = new DataOutputStream(sock.getOutputStream());
-				dos.writeUTF(JOptionPane.showInputDialog(null, "Write a message you want to send to the client..."));
-				sock.close();
-			} catch (SocketTimeoutException e) {
-				JOptionPane.showMessageDialog(null, "SocketTimeoutException");
-				sos = false;
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "IOException");
-				sos = false;
+				dos.writeUTF(JOptionPane.showInputDialog(null, "Client: " + dis.readUTF(), "Message from client!", 1));
 			}
+			sock.close();
+		} catch (SocketTimeoutException e) {
+			System.out.println("Server: disconnected (SocketTimeoutException)");
+			sos = false;
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Server: disconnected (IOException)");
+			sos = false;
 		}
 	}
 

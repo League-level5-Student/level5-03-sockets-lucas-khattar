@@ -28,9 +28,10 @@ public class ChatApp {
 				JOptionPane.YES_NO_OPTION);
 		if (pool == JOptionPane.YES_NO_OPTION) {
 			server = new ServerGreeter();
-			server.run();
+			server.start();
 		} else {
 			client = new ClientGreeter();
+			client.start();
 		}
 	}
 }
